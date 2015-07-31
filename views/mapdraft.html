@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<center>
+<font face="Arial">
+<h1>Outdoor Workers Temperature Guidance based on Temperature Sensors</h1>
+<p><br></p>
+
+<h2>Sensor Locations</h2>
+<p><br></p>
+
+  <head>
+    <style>
+      #map-canvas {
+        width: 500px;
+        height: 400px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+
+      function initialize() {
+
+        var mycenter=new google.maps.LatLng(41.1493, -81.3415);
+        var mapCanvas = document.getElementById('map-canvas');
+        var mapOptions = {
+          center:mycenter,
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var image ='http://s28.postimg.org/yps7xk42x/shaman_Icon.gif';
+        var map = new google.maps.Map(mapCanvas, mapOptions)
+        var marker= new google.maps.Marker({
+            position:new google.maps.LatLng(41.1493, -81.3415),
+            map:map
+
+        });
+        lans={{!lans}};
+        lons={{!lons}};
+        temps={{!temps}};
+
+        var color="";
+
+        for ( i = 0; i < lans.length; i++){
+
+            if(temps[i]>25)
+                color="#FF0000";
+            else if(temps[i]>20 && temps[i]<=25)
+                color="#FFD700";
+            else
+                color="#0000FF";
+            var center=new google.maps.LatLng(lans[i],lons[i]);
+            var myCircle = new google.maps.Circle({
+              center:center,
+              radius:100,
+              strokeColor:color,
+              strokeOpacity:0.8,
+              strokeWeight:2,
+              fillColor:color,
+              fillOpacity:0.8,
+              map:map
+            });
+
+        }
+
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+<p><br></p>
+
+<h2>Temperature Trend Over Last 800 Readings</h2>
+<p><br></p>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        array={{!array}}
+        var data = google.visualization.arrayToDataTable(array);
+
+        var options = {
+            colorAxis: {colors: ['yellow', 'red'], maxValue:45, minValue:15},
+            hAxis: {title: 'Longitude'},
+            vAxis: {title: 'Latitude'},
+            bubble:{opacity:0.8},
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+
+<p><br></p>
+<h2>Heat Index Guide For Employer</h2>
+<p><br></p>
+<img src="/static/temp2.png">
+</font>
+</center>
+</html>
